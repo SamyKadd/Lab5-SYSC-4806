@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book App</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+        }
+
+        .card{
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            padding: 18px;
+            margin: 14px 0;
+        }
+
+        code{
+            background: #f1f1f1;
+            padding: 2px 5px;
+        }
+    </style>
+</head>
+<body>
+<h1>Address Book App</h1>
+<p>This Spring Boot app is running successfully.</p>
+
+<h2>Saved address books</h2>
+<p th:if="${#lists.isEmpty(addressBooks)}">No address books have been created yet.</p>
+
+<div class="card" th:each="addressBook : ${addressBooks}">
+    <a th:href="@{/address-books/{id}(id=${addressBook.id})}"
+       th:text="|Address Book #${addressBook.id}|">Address Book</a>
+</div>
+
+<h2>API</h2>
+<p>Create buddies with <code>POST /api/buddies</code> and address books with
+    <code>POST /api/address-books</code>.</p>
+</body>
+</html>

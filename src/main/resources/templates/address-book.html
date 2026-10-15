@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Book</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+        }
+
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td{
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th{
+            background: #eeeeee;
+        }
+    </style>
+</head>
+<body>
+<h1 th:text="|Address Book #${addressBook.id}|">Address Book</h1>
+
+<p th:if="${#lists.isEmpty(addressBook.buddies)}">This address book is empty.</p>
+
+<table th:unless="${#lists.isEmpty(addressBook.buddies)}">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="buddy : ${addressBook.buddies}">
+        <td th:text="${buddy.name}">Name</td>
+        <td th:text="${buddy.address}">Address</td>
+        <td th:text="${buddy.phone}">Phone</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,21 @@
+Start the app first:
+mvn spring-boot:run
+
+Create an empty address book:
+curl -X POST http://localhost:8080/api/address-books -H "Content-Type: application/json" -d '{}'
+
+Create Alice:
+curl -X POST http://localhost:8080/api/buddies -H "Content-Type: application/json" -d '{"name":"Alice","address":"Ottawa","phone":613555123}'
+
+Create Bob:
+curl -X POST http://localhost:8080/api/buddies -H "Content-Type: application/json" -d '{"name":"Bob","address":"Toronto","phone":416555456}'
+
+Add both buddies to address book 1:
+curl -X PUT http://localhost:8080/api/address-books/1/buddies/1
+curl -X PUT http://localhost:8080/api/address-books/1/buddies/2
+
+Get the address book as JSON:
+curl http://localhost:8080/api/address-books/1
+
+Open the Thymeleaf page:
+http://localhost:8080/address-books/1
