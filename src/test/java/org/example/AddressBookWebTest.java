@@ -13,8 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,7 +55,35 @@ class AddressBookWebTest{
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString(
-                        "Address Book #" + addressBook.getId())));
+                        "Address Book #" + addressBook.getId())))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString(
+                        "Create new address book")));
+    }
+
+    @Test
+    void createsAddressBookFromPage() throws Exception{
+        mockMvc.perform(post("/address-books"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        assertEquals(1, addressBookRepository.count());
+    }
+
+    @Test
+    void addsBuddyFromPage() throws Exception{
+        AddressBook addressBook = addressBookRepository.save(new AddressBook());
+
+        mockMvc.perform(post("/address-books/{addressBookId}/buddies", addressBook.getId())
+                        .param("name", "Bob")
+                        .param("address", "Toronto")
+                        .param("phone", "416555456"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/address-books/" + addressBook.getId()));
+
+        AddressBook savedBook = addressBookRepository.findById(addressBook.getId()).orElseThrow();
+        assertEquals(1, savedBook.getBuddies().size());
+        assertEquals("Bob", savedBook.getBuddies().getFirst().getName());
+        assertEquals(1, buddyInfoRepository.count());
     }
 
     @Test

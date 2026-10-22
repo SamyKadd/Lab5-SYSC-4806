@@ -27,9 +27,27 @@
         th{
             background: #eeeeee;
         }
+
+        form{
+            display: grid;
+            gap: 10px;
+            max-width: 360px;
+            margin-top: 16px;
+        }
+
+        label{
+            display: grid;
+            gap: 4px;
+        }
+
+        input, button{
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
+<p><a th:href="@{/}">Back to all address books</a></p>
+
 <h1 th:text="|Address Book #${addressBook.id}|">Address Book</h1>
 
 <p th:if="${#lists.isEmpty(addressBook.buddies)}">This address book is empty.</p>
@@ -50,5 +68,20 @@
     </tr>
     </tbody>
 </table>
+
+<h2>Add a buddy</h2>
+<form th:action="@{/address-books/{id}/buddies(id=${addressBook.id})}"
+      th:object="${newBuddy}" method="post">
+    <label for="name">Name
+        <input id="name" type="text" th:field="*{name}" required>
+    </label>
+    <label for="address">Address
+        <input id="address" type="text" th:field="*{address}" required>
+    </label>
+    <label for="phone">Phone
+        <input id="phone" type="number" th:field="*{phone}" required>
+    </label>
+    <button type="submit">Add buddy</button>
+</form>
 </body>
 </html>
